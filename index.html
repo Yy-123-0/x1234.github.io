@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时政术语汉译英学习平台</title>
+    <style>
+        :root {
+            --primary-color: #D93025; /* 中国红作为主色调 */
+            --primary-hover: #B71C1C;
+            --bg-color: #F4F6F8;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-secondary: #6B7280;
+            --border-color: #E5E7EB;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* 导航栏 */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 主要内容区 */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* 搜索框 */
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(217, 48, 37, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* 统计与反馈 */
+        .status-bar {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            height: 20px;
+        }
+
+        /* 卡片网格 */
+        .terms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        /* 卡片样式 */
+        .term-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        .term-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(217, 48, 37, 0.3);
+        }
+
+        .card-header {
+            margin-bottom: 16px;
+        }
+
+        .zh-term {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .en-term {
+            font-size: 1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            background-color: rgba(217, 48, 37, 0.05);
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            word-break: break-word;
+        }
+
+        .card-body {
+            flex-grow: 1;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 16px 0;
+        }
+
+        .explanation {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+            background-color: var(--card-bg);
+        }
+
+        /* 动画 */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* 移动端隐藏次要导航 */
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .terms-grid {
+                grid-template-columns: 1fr; /* 移动端单列 */
+                gap: 16px;
+            }
+
+            .term-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航栏 -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">译</div>
+                时政术语学习
+            </a>
+            <nav class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">词库</a>
+                <a href="#">备考指南</a>
+                <a href="#">关于</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main>
+        <!-- 标题与搜索 -->
+        <section class="hero">
+            <h1>时政术语汉译英学习平台</h1>
+            <p>权威译法 · 核心术语 · 速记理解</p>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索中文术语或英文翻译...">
+            </div>
+        </section>
+
+        <div id="statusBar" class="status-bar">共 25 条术语</div>
+
+        <!-- 卡片容器 -->
+        <div id="termsGrid" class="terms-grid">
+            <!-- 卡片将由JS动态生成 -->
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2024 时政术语汉译英学习平台 | 译法来源：中国外文局、新华社等官方发布</p>
+    </footer>
+
+    <script>
+        // 25条时政术语数据
+        const termsData = [
+            { zh: "习近平新时代中国特色社会主义思想", en: "Xi Jinping Thought on Socialism with Chinese Characteristics for a New Era", desc: "中国共产党必须长期坚持的指导思想。注意“Thought”（思想）和“For a New Era”（新时代）的固定搭配，不可拆分或替换。" },
+            { zh: "中国式现代化", en: "Chinese modernization", desc: "中国共产党领导的社会主义现代化，既有各国现代化的共同特征，更有基于自己国情的中国特色。官方英译已简化为此固定表述。" },
+            { zh: "两个确立", en: "the Two Affirmations", desc: "指确立习近平同志党中央的核心、全党的核心地位，确立习近平新时代中国特色社会主义思想的指导地位。“Affirmation”在此表示坚决拥护和确认。" },
+            { zh: "两个维护", en: "the Two Upholds", desc: "指坚决维护习近平总书记党中央的核心、全党的核心地位，坚决维护党中央权威和集中统一领导。“Uphold”意为支持、维护。" },
+            { zh: "四个意识", en: "the Four Consciousnesses", desc: "指政治意识、大局意识、核心意识、看齐意识（political consciousness, consciousness of the big picture, consciousness of the core, and consciousness of alignment）。" },
+            { zh: "四个自信", en: "the Four Confidences", desc: "指道路自信、理论自信、制度自信、文化自信（confidence in the path, theory, system, and culture of socialism with Chinese characteristics）。注意“自信”在时政语境中统一译为“Confidence”。" },
+            { zh: "国家治理体系和治理能力现代化", en: "modernization of China's system and capacity for governance", desc: "全面深化改革的总目标之一。注意“治理体系”译为 system for governance，“治理能力”译为 capacity for governance。" },
+            { zh: "全过程人民民主", en: "whole-process people's democracy", desc: "中国特色社会主义民主的重要理念，强调民主选举、民主协商、民主决策、民主管理、民主监督各环节的统一。" },
+            { zh: "总体国家安全观", en: "a holistic approach to national security", desc: "强调统筹发展和安全，涵盖政治、经济、军事、文化等多个领域的综合安全观。“Holistic”意为整体的、全面的。" },
+            { zh: "中华民族共同体意识", en: "a sense of community for the Chinese nation", desc: "民族工作的主线，强调各民族在中华民族大家庭中休戚与共的命运共同体感。" },
+            { zh: "共建共治共享", en: "collaboration, participation, and common interests", desc: "社会治理格局的核心理念。注意这里没有直译为 co-build, co-govern, co-share，而是采用了更符合英文地道表达的名词组合。" },
+            { zh: "全面从严治党", en: "full and rigorous Party self-governance", desc: "新时代党的建设方针。“Rigorous”体现了“严”的主基调，“self-governance”对应“治党”。" },
+            { zh: "不敢腐、不能腐、不想腐", en: "deterrence, containment, and vigilance against corruption", desc: "反腐败斗争的体制机制。官方英译跳出了字面直译，采用了意译：deterrence（威慑/不敢）、containment（遏制/不能）、vigilance（警惕/不想）。" },
+            { zh: "新发展理念", en: "the new development philosophy", desc: "即创新、协调、绿色、开放、共享。注意“理念”在此处译为“philosophy”（哲学/理念），而非 idea 或 concept。" },
+            { zh: "高质量发展", en: "high-quality development", desc: "全面建设社会主义现代化国家的首要任务，强调从速度规模型向质量效益型转变。" },
+            { zh: "新发展格局", en: "the new development paradigm", desc: "即以国内大循环为主体、国内国际双循环相互促进的格局。“Paradigm”意为范式，比 pattern 或 structure 更具宏观理论高度。" },
+            { zh: "供给侧结构性改革", en: "supply-side structural reform", desc: "旨在调整经济结构，实现要素最优配置，提升经济增长的质量和数量。" },
+            { zh: "乡村振兴", en: "rural revitalization", desc: "国家重大战略，旨在实现乡村产业、人才、文化、生态、组织振兴。“Revitalization”意为复兴、复苏，是官方固定译法。" },
+            { zh: "绿水青山就是金山银山", en: "Lucid waters and lush mountains are invaluable assets", desc: "习近平生态文明思想的核心理念。注意“绿水青山”不译为 green mountains，而是更具文学色彩的 lucid waters and lush mountains；“金山银山”译为 invaluable assets。" },
+            { zh: "人与自然和谐共生", en: "harmony between humanity and nature", desc: "中国式现代化的重要特征之一。注意“人类”在此语境下通常用 humanity 而非 man 或 human beings。" },
+            { zh: "人类命运共同体", en: "a global community of shared future", desc: "中国提出的全球治理愿景。官方译法已从早期的 community of shared future for mankind 演进为更包容的 a global community of shared future。" },
+            { zh: "共建“一带一路”倡议", en: "the Belt and Road Initiative (BRI)", desc: "促进全球基础设施建设和经济合作的国际倡议。注意是 Initiative（倡议），绝不能误译为 Strategy（战略）。" },
+            { zh: "全球发展倡议", en: "Global Development Initiative (GDI)", desc: "中国为加快落实联合国2030年可持续发展议程提出的首个全球性重大倡议。" },
+            { zh: "全球安全倡议", en: "Global Security Initiative (GSI)", desc: "旨在推动各国坚持共同、综合、合作、可持续的安全观。" },
+            { zh: "全球文明倡议", en: "Global Civilization Initiative (GCI)", desc: "倡导尊重世界文明多样性，坚持文明平等、互鉴、对话、包容。与GDI、GSI共同构成中国提出的三大全球性倡议。" }
+        ];
+
+        const termsGrid = document.getElementById('termsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const statusBar = document.getElementById('statusBar');
+
+        // 渲染卡片函数
+        function renderCards(data) {
+            termsGrid.innerHTML = '';
+            
+            if (data.length === 0) {
+                termsGrid.innerHTML = '<div class="no-results">😕 未找到匹配的术语，请尝试其他关键词</div>';
+                statusBar.textContent = '共 0 条搜索结果';
+                return;
+            }
+
+            statusBar.textContent = `共 ${data.length} 条术语`;
+
+            data.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'term-card';
+                // 为每个卡片设置递增的动画延迟
+                card.style.animationDelay = `${index * 0.03}s`;
+                
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="zh-term">${item.zh}</div>
+                        <div class="en-term">${item.en}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="divider"></div>
+                        <div class="explanation">${item.desc}</div>
+                    </div>
+                `;
+                termsGrid.appendChild(card);
+            });
+        }
+
+        // 初始渲染
+        renderCards(termsData);
+
+        // 搜索防抖与过滤
+        let debounceTimer;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const keyword = e.target.value.trim().toLowerCase();
+                
+                if (!keyword) {
+                    renderCards(termsData);
+                    return;
+                }
+
+                const filteredData = termsData.filter(item => {
+                    return item.zh.toLowerCase().includes(keyword) || 
+                           item.en.toLowerCase().includes(keyword);
+                });
+
+                renderCards(filteredData);
+            }, 200); // 200ms防抖，提升性能
+        });
+    </script>
+</body>
+</html>
